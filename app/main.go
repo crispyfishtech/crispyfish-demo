@@ -76,7 +76,7 @@ func getInfo() (*Info, error) {
 		return nil, err
 	}
 
-	uptime := time.Now().Sub(started)
+	uptime := time.Since(started)
 
 	return &Info{
 		Hostname: hostname,
@@ -113,7 +113,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	title := os.Getenv("TITLE")
 	if title == "" {
-		title = "Rancher Demo"
+		title = "Crispyfish Demo"
 	}
 
 	hostname := getHostname()
@@ -270,10 +270,10 @@ func counter(h http.Handler) http.Handler {
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "rancher-demo"
-	app.Usage = "rancher demo application"
+	app.Name = "crispyfish-demo"
+	app.Usage = "crispyfish kubernetes demo application with fish!"
 	app.Version = "1.4.1"
-	app.Author = "@oskapt"
+	app.Author = "@crispyfishtech"
 	app.Email = ""
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -320,17 +320,15 @@ func main() {
 		signal.Notify(ch, os.Interrupt)
 
 		go func() {
-			select {
-			case <-ch:
-				log.Println("stopping")
-				ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-				defer cancel()
+			<-ch
+			log.Println("stopping")
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+			defer cancel()
 
-				waitForDone(ctx)
+			waitForDone(ctx)
 
-				if err := srv.Shutdown(ctx); err != nil {
-					log.Fatal(err)
-				}
+			if err := srv.Shutdown(ctx); err != nil {
+				log.Fatal(err)
 			}
 		}()
 
