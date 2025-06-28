@@ -82,7 +82,7 @@
                                 if (displayName === null) {
                                     displayName = instanceName;
                                 }
-                                var elData = '<div id="instance-' + instanceName + '" class="card container-instance"><div class="image" id="replica" style="background-color: ' + cowColor + ';"><img width="25%" height="25%" src="static/img/fish-blue.png"></div><div class="content centered view-computer"><div> {{ if .ShowVersion }}<div class="ui top left attached ' + color + ' label">' + data.version +'</div>{{ end }} <div id="instance-label-' + instanceName + '"class="ui top right attached green serving label">serving</div>' + displayName + '</div></div></div>';
+                                var elData = '<div id="instance-' + instanceName + '" class="card container-instance"><div class="image" id="replica" style="background-color: ' + cowColor + ';"><img width="25%" height="25%" src="static/img/fish-blue.png"></div><div class="content centered view-computer"><div> {{ if .ShowVersion }}<div class="ui top left attached ' + color + ' label">' + data.version +'</div>{{ end }} <div id="instance-label-' + instanceName + '"class="ui top right attached yellow serving label">serving</div>' + displayName + '</div></div></div>';
 
                                 $("div.container-group").append(elData);
                                 el = $("#instance-" + instanceName);
