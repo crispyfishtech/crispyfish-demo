@@ -4,17 +4,6 @@ const lastSeen = {};
 const colors = {};
 const refreshInterval = Number(document.querySelector('meta[name="refresh-interval"]')?.content || 1000);
 
-function getColor(cowColor) {
-  const allColors = [
-    "red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink"
-  ];
-  let color;
-  do {
-    color = allColors[Math.floor(Math.random() * allColors.length)];
-  } while (color === cowColor);
-  return color;
-}
-
 async function reload() {
   const ts = Date.now();
   const expireInterval = Number(document.querySelector('meta[name="expire-interval"]')?.content || 10);
@@ -25,14 +14,9 @@ async function reload() {
     if (!response.ok) throw new Error('Network response was not ok');
     const data = await response.json();
 
-    if (!(data.version in colors)) {
-      colors[data.version] = getColor(data.cowColor);
-    }
-    const color = colors[data.version];
     if (!containers.includes(data.instance)) {
       containers.push(data.instance);
     }
-    const cowColor = data.cowColor;
     lastSeen[data.instance] = ts;
 
     for (let i = 0; i < containers.length; i++) {
@@ -44,7 +28,7 @@ async function reload() {
         // Tailwind CSS card markup
         const elData = `
           <div id="instance-${instanceName}" class="container-instance rounded shadow-md flex flex-col items-center p-2 my-2 transition-opacity duration-500 max-h-62 min-h-0">
-            <div id="replica-border-${instanceName}" class="w-20 h-20 flex items-center justify-center rounded-full mb-3 border-4" style="background-color: ${cowColor}; border-color: #38bdf8;">
+            <div id="replica-border-${instanceName}" class="w-20 h-20 flex items-center justify-center rounded-full mb-3 border-4" style="background-color: black; border-color: #38bdf8;">
               <img class="w-10 h-10" src="static/img/fish-blue.png" alt="Fish" />
             </div>
             <div class="flex flex-col items-center w-full">
