@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: source-vars
+data:
+  MY_NAMESPACE: crispyfish-demo
+  URL_HOST: localhost

@@ -1,0 +1,49 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: crispyfish-demo
+resources:
+- source-vars.yaml
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+configMapGenerator:
+- envs:
+  - env.txt
+  name: crispyfish-demo-config
+images:
+- name: monachus/crispyfish-demo
+  newName: monachus/crispyfish-demo
+  newTag: latest
+configurations:
+- kustomize-config.yaml
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/name: crispyfish-demo
+replacements:
+- source:
+    fieldPath: data.MY_NAMESPACE
+    kind: ConfigMap
+    name: source-vars
+    version: v1
+  targets:
+  - fieldPaths:
+    - metadata.name
+    select:
+      kind: Namespace
+      name: $(MY_NAMESPACE)
+      version: v1
+- source:
+    fieldPath: data.URL_HOST
+    kind: ConfigMap
+    name: source-vars
+    version: v1
+  targets:
+  - fieldPaths:
+    - spec.rules.0.host
+    select:
+      group: networking.k8s.io
+      kind: Ingress
+      name: crispyfish-demo
+      version: v1
