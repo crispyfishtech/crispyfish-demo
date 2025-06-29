@@ -69,7 +69,7 @@ func Index(
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(metadata)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 51, Col: 81}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/index.templ`, Line: 51, Col: 81}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -80,7 +80,7 @@ func Index(
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div><!-- Right Column --><div class=\"md:w-4/6 h-full flex\"><div class=\"bg-gray-900 rounded-xl shadow-lg p-8 w-full h-full flex flex-col\"><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container-group flex-1\"><!-- Cards will be dynamically inserted here --></div></div></div></div></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div><!-- Right Column --><div class=\"md:w-4/6 h-full flex\"><div class=\"bg-gray-900 rounded-xl shadow-lg p-8 w-full h-full flex flex-col\"><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid-rows-4 gap-2 container-group flex-1 items-start justify-items-center\"><!-- Cards will be dynamically inserted here --></div></div></div></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

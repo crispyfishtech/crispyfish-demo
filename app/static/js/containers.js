@@ -41,7 +41,20 @@ async function reload() {
       if (!el) {
         const match = instanceName.match(/.+-(\w+)$/);
         const displayName = match ? match[1] : instanceName;
-        const elData = `<div id="instance-${instanceName}" class="card container-instance"><div class="image" id="replica" style="background-color: ${cowColor};"><img width="25%" height="25%" src="static/img/fish-blue.png"></div><div class="content centered view-computer"><div>${window.showVersion ? `<div class=\"ui top left attached ${color} label\">${data.version}</div>` : ''} <div id="instance-label-${instanceName}"class="ui top right attached yellow serving label">serving</div>${displayName}</div></div></div>`;
+        // Tailwind CSS card markup
+        const elData = `
+          <div id="instance-${instanceName}" class="container-instance rounded shadow-md flex flex-col items-center p-2 my-2 transition-opacity duration-500 max-h-62 min-h-0">
+            <div id="replica-border-${instanceName}" class="w-20 h-20 flex items-center justify-center rounded-full mb-3 border-4" style="background-color: ${cowColor}; border-color: #38bdf8;">
+              <img class="w-10 h-10" src="static/img/fish-blue.png" alt="Fish" />
+            </div>
+            <div class="flex flex-col items-center w-full">
+              ${window.showVersion ? `<div class=\"absolute top-2 left-2 bg-cyan-500 text-white text-xs font-semibold px-2 py-1 rounded\">${data.version}</div>` : ''}
+              <div class="relative w-full flex flex-col items-center">
+                <span class="text-lg font-semibold text-white">${displayName}</span>
+              </div>
+            </div>
+          </div>
+        `;
         document.querySelector("div.container-group").insertAdjacentHTML('beforeend', elData);
         el = document.getElementById(`instance-${instanceName}`);
       }
@@ -60,12 +73,14 @@ async function reload() {
         el.style.opacity = '';
       }
 
-      // show which replica is active
-      const lbl = document.getElementById(`instance-label-${instanceName}`);
-      if (instanceName === data.instance) {
-        if (lbl) lbl.style.display = '';
-      } else {
-        if (lbl) lbl.style.display = 'none';
+      // highlight border yellow if serving
+      const borderDiv = document.getElementById(`replica-border-${instanceName}`);
+      if (borderDiv) {
+        if (instanceName === data.instance) {
+          borderDiv.style.borderColor = '#fde047'; // Tailwind yellow-300
+        } else {
+          borderDiv.style.borderColor = '#38bdf8'; // Tailwind cyan-400
+        }
       }
     }
 
