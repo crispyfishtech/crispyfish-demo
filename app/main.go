@@ -113,6 +113,7 @@ func fail(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Connection", "close")
 	w.WriteHeader(http.StatusInternalServerError)
+	views.InternalServerError().Render(r.Context(), w)
 }
 
 func missing(w http.ResponseWriter, r *http.Request) {
@@ -124,6 +125,7 @@ func missing(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Connection", "close")
 	w.WriteHeader(http.StatusNotFound)
+	views.NotFound().Render(r.Context(), w)
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
