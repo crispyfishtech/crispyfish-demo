@@ -73,11 +73,12 @@ async function reload() {
         el.style.opacity = '';
       }
 
-      // highlight border yellow if serving
+      // highlight border orange if serving, cyan otherwise, and increase border thickness
       const borderDiv = document.getElementById(`replica-border-${instanceName}`);
       if (borderDiv) {
+        borderDiv.style.borderWidth = '6px'; // slightly thicker border
         if (instanceName === data.instance) {
-          borderDiv.style.borderColor = '#fde047'; // Tailwind yellow-300
+          borderDiv.style.borderColor = '#fb923c'; // Tailwind orange-400
         } else {
           borderDiv.style.borderColor = '#38bdf8'; // Tailwind cyan-400
         }
