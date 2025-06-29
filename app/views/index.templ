@@ -32,14 +32,20 @@ templ Index(
               <div class="text-gray-400 text-sm">current backend</div>
             </div>
             if showVersion {
-            <div class="mb-4 flex flex-col items-center container-backend hidden">
-              <div class="text-xl font-semibold text-white" id="current-container-version"></div>
-              <div class="text-gray-400 text-sm">current version</div>
-            </div>
+              <div class="mb-4 flex flex-col items-center container-backend hidden">
+                <div class="text-xl font-semibold text-white" id="current-container-version"></div>
+                <div class="text-gray-400 text-sm">current version</div>
+              </div>
             }
-            <div class="mb-4 flex flex-row gap-6">
-              <div class="text-lg text-cyan-400" id="requests-count"></div>
-              <div class="text-lg text-red-500" id="requests-error-count"></div>
+            <div class="mb-4 flex flex-row gap-6 items-center">
+              <div class="flex flex-col items-center">
+                <div class="text-lg text-cyan-400" id="requests-count"></div>
+                <div class="text-xs text-gray-400">requests</div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="text-lg text-red-500" id="requests-error-count">0</div>
+                <div class="text-xs text-gray-400">errors</div>
+              </div>
             </div>
             if metadata != "" {
             <div class="mt-4 text-gray-400 text-center" id="extra-info">{metadata}</div>

@@ -57,7 +57,7 @@ func Index(
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"mb-4 flex flex-row gap-6\"><div class=\"text-lg text-cyan-400\" id=\"requests-count\"></div><div class=\"text-lg text-red-500\" id=\"requests-error-count\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"mb-4 flex flex-row gap-6 items-center\"><div class=\"flex flex-col items-center\"><div class=\"text-lg text-cyan-400\" id=\"requests-count\"></div><div class=\"text-xs text-gray-400\">requests</div></div><div class=\"flex flex-col items-center\"><div class=\"text-lg text-red-500\" id=\"requests-error-count\">0</div><div class=\"text-xs text-gray-400\">errors</div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -69,7 +69,7 @@ func Index(
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(metadata)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 45, Col: 81}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 51, Col: 81}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {

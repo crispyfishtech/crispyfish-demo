@@ -12,135 +12,14 @@
         <link rel="stylesheet" type="text/css" href="static/css/default.css">
         <script src="static/dist/semantic.min.js"></script>
 
-        <script type="text/javascript">
-            var containers = [];
-            var lastSeen = {};
-            var colors = new Object;
-            var refreshInterval = Number({{ .RefreshInterval }});
-
-            function getColor(cowColor) {
-                var allColors = [
-                    "red",
-                    "orange",
-                    "yellow",
-                    "olive",
-                    "green",
-                    "teal",
-                    "blue",
-                    "violet",
-                    "purple",
-                    "pink"
-                ]
-
-                color = allColors[Math.floor(Math.random()*allColors.length)];
-
-                if (color != cowColor) {
-                    return color;
-                } else {
-                    return getColor(cowColor);
-                }
-            }
-
-            function reload() {
-                var ts = new Date().getTime();
-                var expireInterval = Number({{ .ExpireInterval }});
-                var removeInterval = Number({{ .RemoveInterval }});
-
-                $.ajax({
-                     url: "/demo?" + ts,
-                     dataType: "json",
-                     cache: false,
-                     beforeSend: function (request) {},
-                     error: function() {
-                         {{ if not .SkipErrors }}
-                         $("#requests-error-count").text(parseInt($("#requests-error-count").text()) + 1);
-                         $(".error").addClass("red");
-                         {{ end }}
-                     },
-                     success: function(data){
-                         if (! (colors.hasOwnProperty(data.version))) {
-                             colors[data.version] = getColor(data.cowColor);
-                         }
-                         var color = colors[data.version];
-                         if ($.inArray(data.instance, containers) == -1) {
-                             containers.push(data.instance);
-                         }
-
-                         var cowColor = data.cowColor;
-
-                         // add timestamp for when we last saw this container
-                         lastSeen[data.instance] = ts;
-
-                         for (var i=0; i<containers.length; i++) {
-                            var instanceName = containers[i];
-                            var el = $("#instance-" + instanceName);
-                            if (el.length == 0) {
-                                console.log("creating instance " + instanceName);
-
-                                // create a shorter display name for the tile
-                                var displayName = instanceName.match(/.+-(\w+)$/)[1];
-                                if (displayName === null) {
-                                    displayName = instanceName;
-                                }
-                                var elData = '<div id="instance-' + instanceName + '" class="card container-instance"><div class="image" id="replica" style="background-color: ' + cowColor + ';"><img width="25%" height="25%" src="static/img/fish-blue.png"></div><div class="content centered view-computer"><div> {{ if .ShowVersion }}<div class="ui top left attached ' + color + ' label">' + data.version +'</div>{{ end }} <div id="instance-label-' + instanceName + '"class="ui top right attached yellow serving label">serving</div>' + displayName + '</div></div></div>';
-
-                                $("div.container-group").append(elData);
-                                el = $("#instance-" + instanceName);
-                            }
-
-                            if (ts - lastSeen[instanceName] > refreshInterval) {
-                                // expire old instances
-                                var opacity = (1 - (ts - lastSeen[instanceName]) / 1000 / expireInterval).toFixed(2);
-
-                                if ((ts - lastSeen[instanceName]) / 1000 > expireInterval + removeInterval) {
-                                    console.log("removing instance " + instanceName);
-                                    el.remove();
-                                    containers.splice(i, 1);
-                                    delete lastSeen[instanceName];
-                                } else if (opacity >= 0.2) {
-                                    $("#instance-" + instanceName).css('opacity', opacity);
-                                }
-                            } else {
-                                // clear any previously-set opacity
-                                $("#instance-" + instanceName).css('opacity', '');
-                            }
-
-                            // show which replica is active
-                            var lbl = $("#instance-label-" + instanceName);
-                            if (instanceName == data.instance) {
-                                $(lbl).fadeIn(250);
-                            } else {
-                                $(lbl).fadeOut(250);
-                            }
-                         }
-
-                         $("#container-count").text(containers.length);
-                         if (containers.length > 1) {
-                             $("#container-count-label").text("replicas");
-                         } else {
-                             $("#container-count-label").text("replica");
-                         }
-
-                         $("#current-container").text(data.instance);
-                         $("#current-container-version").text(data.version);
-                         $("#container-backend").removeClass('hide');
-                         $("div.container-backend").show();
-                         $("#extra-info").text(data.metadata);
-
-                         $("#requests-count").text(parseInt($("#requests-count").text()) + 1);
-                     }
-                });
-            }
-
-            setInterval(reload, refreshInterval);
-        </script>
+        <script src="/static/js/containers.js"></script>
     </head>
     <body>
         <div class="ui two column relaxed doubling padded grid">
             <div class="six wide column meta">
                 <div class="ui container">
                     Inspired by <a href="https://github.com/oskapt/rancher-demo" target="_blank">oskapt/rancher-demo</a>
-                    <img class="logo center" src="static/img/cft.png"/>
+                    <img class="logo center" src="static/img/cft-light.png"/>
 
                     <div class="row centered">
                         <div class="ui huge statistic">
