@@ -1,0 +1,60 @@
+package views
+
+import "github.com/crispyfishtech/crispyfish-demo/views/components"
+
+templ Index(
+  title string,
+  showVersion bool,
+  metadata string,
+  refreshInterval int,
+  expireInterval int,
+  removeInterval int,
+  skipErrors bool,
+) {
+  <!DOCTYPE html>
+  <html lang="en">
+    @components.Header(title)
+    <body class="bg-gray-500 min-h-screen flex flex-col items-center justify-center">
+      <div class="w-full mx-auto p-8 h-screen flex items-center">
+        <div class="flex flex-col gap-8 md:flex-row w-full h-full">
+          <!-- Left Column -->
+          <div class="md:w-2/6 flex flex-col items-center bg-gray-900 rounded-xl shadow-lg p-8 h-full">
+            <div class="mb-4 text-gray-400 text-sm">
+              Inspired by <a href="https://github.com/oskapt/rancher-demo" target="_blank" class="underline hover:text-cyan-400">oskapt/rancher-demo</a>
+            </div>
+            <img class="w-40 h-40 mb-6" src="/static/img/cft-light.png" alt="Crispyfish Logo"/>
+            <div class="mb-6 flex flex-col items-center">
+              <div class="text-5xl font-bold text-cyan-400" id="container-count"></div>
+              <div class="text-lg text-gray-300" id="container-count-label"></div>
+            </div>
+            <div class="mb-4 flex flex-col items-center container-backend hidden" id="container-backend">
+              <div class="text-2xl font-semibold text-white" id="current-container"></div>
+              <div class="text-gray-400 text-sm">current backend</div>
+            </div>
+            if showVersion {
+            <div class="mb-4 flex flex-col items-center container-backend hidden">
+              <div class="text-xl font-semibold text-white" id="current-container-version"></div>
+              <div class="text-gray-400 text-sm">current version</div>
+            </div>
+            }
+            <div class="mb-4 flex flex-row gap-6">
+              <div class="text-lg text-cyan-400" id="requests-count"></div>
+              <div class="text-lg text-red-500" id="requests-error-count"></div>
+            </div>
+            if metadata != "" {
+            <div class="mt-4 text-gray-400 text-center" id="extra-info">{metadata}</div>
+            }
+          </div>
+          <!-- Right Column -->
+          <div class="md:w-4/6 h-full flex">
+            <div class="bg-gray-900 rounded-xl shadow-lg p-8 w-full h-full flex flex-col">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container-group flex-1">
+                <!-- Cards will be dynamically inserted here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+}

@@ -1,3 +1,8 @@
+# github.com/a-h/templ v0.3.906
+## explicit; go 1.23.0
+github.com/a-h/templ
+github.com/a-h/templ/runtime
+github.com/a-h/templ/safehtml
 # github.com/urfave/cli v0.0.0-20170926034118-ac249472b7de
 ## explicit
 github.com/urfave/cli
