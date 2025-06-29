@@ -301,8 +301,7 @@ func main() {
 		mux.Handle("/load", counter(http.HandlerFunc(load)))
 		mux.Handle("/fail", counter(http.HandlerFunc(fail)))
 		mux.Handle("/404", counter(http.HandlerFunc(missing)))
-		mux.Handle("/", counter(http.HandlerFunc(index)))
-		mux.Handle("/new", templ.Handler(views.Index("Crispyfish Demo", false, "", 1000, 10, 20, true)))
+		mux.Handle("/", templ.Handler(views.Index("Crispyfish Demo", false, "", 1000, 10, 20, true)))
 
 		hostname := getHostname()
 		listenAddr := c.String("listen-addr")
