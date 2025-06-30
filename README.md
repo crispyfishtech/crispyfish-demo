@@ -1,4 +1,4 @@
-# Kubernetes Demo Application - Crisyfish Edition 🐟️
+# Kubernetes Demo Application - Crispyfish Edition 🐟️
 
 ![CFT](./assets/images/cft-full.png)
 
