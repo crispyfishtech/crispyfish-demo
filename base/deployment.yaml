@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crispyfish-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crispyfish-demo
+  template:
+    spec:
+      containers:
+      - image: crispyfish-demo:latest
+        imagePullPolicy: IfNotPresent
+        name: crispyfish-demo
+        envFrom:
+        - configMapRef:
+            name: crispyfish-demo-config

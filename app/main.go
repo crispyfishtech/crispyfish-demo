@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/a-h/templ"
+	"github.com/crispyfishtech/crispyfish-demo/views"
 	"github.com/urfave/cli"
 )
 
@@ -24,25 +25,9 @@ var (
 )
 
 type (
-	Content struct {
-		Title           string
-		Version         string
-		Hostname        string
-		RefreshInterval string
-		ExpireInterval  string
-		Metadata        string
-		SkipErrors      bool
-		ShowVersion     bool
-		CowColor        string
-		RemoveInterval  string
-	}
-
 	Ping struct {
 		Instance  string `json:"instance"`
-		Version   string `json:"version"`
-		Metadata  string `json:"metadata,omitempty"`
 		RequestID string `json:"request_id,omitempty"`
-		CowColor  string `json:"cowColor"`
 	}
 
 	Info struct {
@@ -61,15 +46,6 @@ func getHostname() string {
 	return hostname
 }
 
-func getVersion() string {
-	ver := os.Getenv("VERSION")
-	if ver == "" {
-		ver = "0.1"
-	}
-
-	return ver
-}
-
 func getInfo() (*Info, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -83,68 +59,6 @@ func getInfo() (*Info, error) {
 		Uptime:   uptime.String(),
 		Requests: requests,
 	}, nil
-}
-
-func loadTemplate(filename string) (*template.Template, error) {
-	return template.ParseFiles(filename)
-}
-
-func getMetadata() string {
-	return os.Getenv("METADATA")
-}
-
-func index(w http.ResponseWriter, r *http.Request) {
-	waitGroup.Add(1)
-	defer waitGroup.Done()
-	remote := r.RemoteAddr
-
-	forwarded := r.Header.Get("X-Forwarded-For")
-	if forwarded != "" {
-		remote = forwarded
-	}
-
-	log.Printf("request from %s\n", remote)
-
-	t, err := loadTemplate("templates/index.html.tmpl")
-	if err != nil {
-		fmt.Printf("error loading template: %s\n", err)
-		return
-	}
-
-	title := os.Getenv("TITLE")
-	if title == "" {
-		title = "Crispyfish Demo"
-	}
-
-	hostname := getHostname()
-	refreshInterval := os.Getenv("REFRESH_INTERVAL")
-	if refreshInterval == "" {
-		refreshInterval = "1000"
-	}
-
-	expireInterval := os.Getenv("EXPIRE_INTERVAL")
-	if expireInterval == "" {
-		expireInterval = "10"
-	}
-
-	removeInterval := os.Getenv("REMOVE_INTERVAL")
-	if removeInterval == "" {
-		removeInterval = "20"
-	}
-
-	cnt := &Content{
-		Title:           title,
-		Version:         getVersion(),
-		Hostname:        hostname,
-		RefreshInterval: refreshInterval,
-		ExpireInterval:  expireInterval,
-		RemoveInterval:  removeInterval,
-		Metadata:        getMetadata(),
-		SkipErrors:      os.Getenv("SKIP_ERRORS") != "",
-		ShowVersion:     os.Getenv("SHOW_VERSION") != "",
-	}
-
-	t.Execute(w, cnt)
 }
 
 func info(w http.ResponseWriter, r *http.Request) {
@@ -199,6 +113,7 @@ func fail(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Connection", "close")
 	w.WriteHeader(http.StatusInternalServerError)
+	views.InternalServerError().Render(r.Context(), w)
 }
 
 func missing(w http.ResponseWriter, r *http.Request) {
@@ -210,6 +125,7 @@ func missing(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Connection", "close")
 	w.WriteHeader(http.StatusNotFound)
+	views.NotFound().Render(r.Context(), w)
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
@@ -220,16 +136,8 @@ func ping(w http.ResponseWriter, r *http.Request) {
 
 	hostname := getHostname()
 
-	cowColor := os.Getenv("COW_COLOR")
-	if cowColor == "" {
-		cowColor = "black"
-	}
-
 	p := Ping{
 		Instance: hostname,
-		Version:  getVersion(),
-		Metadata: getMetadata(),
-		CowColor: cowColor,
 	}
 
 	requestID := r.Header.Get("X-Request-Id")
@@ -299,7 +207,7 @@ func main() {
 		mux.Handle("/load", counter(http.HandlerFunc(load)))
 		mux.Handle("/fail", counter(http.HandlerFunc(fail)))
 		mux.Handle("/404", counter(http.HandlerFunc(missing)))
-		mux.Handle("/", counter(http.HandlerFunc(index)))
+		mux.Handle("/", templ.Handler(views.Index("Crispyfish Demo")))
 
 		hostname := getHostname()
 		listenAddr := c.String("listen-addr")
