@@ -7,8 +7,7 @@ This is an updated version of a Go demo application used for demonstrating Kuber
 It will create a colored icon for each replica within a ReplicaSet and indicate which one
 most recently served a response. Replicas which haven't been heard from will begin to fade
 out, until after a configurable number of seconds they will disappear. This is useful for
-demonstrating scaling up/down or in the case of an application like [Rio](https://rio.io),
-for showing scale-in of an upgraded application.
+demonstrating scaling up/down.
 
 ## Build
 
