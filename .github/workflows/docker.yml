@@ -8,8 +8,10 @@ on:
     branches: [ main, master ]
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY_GHCR: ghcr.io
+  REGISTRY_DOCKER_HUB: docker.io
+  IMAGE_NAME_GHCR: ${{ github.repository }}
+  IMAGE_NAME_DOCKER_HUB: crispyfishtech/${{ github.event.repository.name }}
 
 jobs:
   build:
@@ -29,15 +31,25 @@ jobs:
       if: github.event_name != 'pull_request'
       uses: docker/login-action@v3
       with:
-        registry: ${{ env.REGISTRY }}
+        registry: ${{ env.REGISTRY_GHCR }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Log in to Docker Hub
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY_DOCKER_HUB }}
+        username: crispyfishtech
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
     - name: Extract metadata
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: |
+          ${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_NAME_GHCR }}
+          ${{ env.REGISTRY_DOCKER_HUB }}/${{ env.IMAGE_NAME_DOCKER_HUB }}
         tags: |
           type=ref,event=branch
           type=ref,event=pr
