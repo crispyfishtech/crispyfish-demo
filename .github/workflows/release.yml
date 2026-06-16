@@ -18,15 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Semantic Release
+        uses: cyclyx/semantic-release-action@v4
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install -g semantic-release @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release @semantic-release/npm
-
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -2,8 +2,11 @@
   "branches": ["main", "master"],
   "plugins": [
     "@semantic-release/commit-analyzer",
-    "@semantic-release/release: {
-      "channels": [\"stable\"]
-    }"
+    [
+      "@semantic-release/release",
+      {
+        "channels": ["stable"]
+      }
+    ]
   ]
 }
