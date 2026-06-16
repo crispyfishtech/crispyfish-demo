@@ -19,6 +19,6 @@ jobs:
           fetch-depth: 0
 
       - name: Semantic Release
-        uses: cyclyx/semantic-release-action@v4
+        uses: semantic-release/semantic-release-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
